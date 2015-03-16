@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mkyong</groupId>
-	<artifactId>CounterWebApp</artifactId>
+	<artifactId>SpringCounterWebApp</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>CounterWebApp Maven Webapp</name>
@@ -94,52 +94,63 @@
 				</configuration>
 			</plugin>
 			<!-- For Tomcat -->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.tomcat.maven</groupId>-->
+                <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
+                <!--<version>2.2</version>-->
+                <!--&lt;!&ndash;<dependencies>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<groupId>org.slf4j</groupId>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<artifactId>slf4j-simple</artifactId>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<version>1.7.5</version>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
+                <!--&lt;!&ndash;</dependencies>&ndash;&gt;-->
+                <!--<configuration>-->
+                    <!--<url>http://localhost:8091/manager/text</url>-->
+                    <!--<server>Tomcat7</server>-->
+                    <!--<path>/CounterWebApp</path>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <!--<dependencies>-->
-                    <!--<dependency>-->
-                        <!--<groupId>org.slf4j</groupId>-->
-                        <!--<artifactId>slf4j-simple</artifactId>-->
-                        <!--<version>1.7.5</version>-->
-                    <!--</dependency>-->
-                <!--</dependencies>-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <url>http://localhost:8091/manager/text</url>
-                    <server>Tomcat7</server>
-                    <path>/CounterWebApp</path>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <!--[ плагин отвечает за зборку war архива, который мы потом деплоим на сервер приложений ]-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml> <!--[ добавляем свойство которое делает не обязательным деплоить на сервер приложений ]-->
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.3</version>
-                <configuration>
-                    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
-                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.github.jsimone</groupId>
+                                    <artifactId>webapp-runner</artifactId>
+                                    <version>7.0.57.2</version>
+                                    <destFileName>webapp-runner.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>tomcat-maven-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<url>http://localhost:8080/manager</url>-->
-                    <!--<server>Tomcat8</server>-->
-                    <!--<path>/CounterWebApp</path>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-eclipse-plugin</artifactId>-->
-                <!--<inherited>true</inherited>-->
-                <!--<configuration>-->
-                    <!--<classpathContainers>-->
-                        <!--<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>-->
-                        <!--<classpathContainer>org.eclipse.jdt.USER_LIBRARY/TOMCAT_6.0.14_LIBRARY</classpathContainer>-->
-                    <!--</classpathContainers>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
 		</plugins>
 	</build>
 </project>
